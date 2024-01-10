@@ -1,0 +1,2 @@
+- [ ] Create Component for each individual displayed post
+- [ ] Create Component for each individual displayed comment
