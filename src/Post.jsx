@@ -12,12 +12,25 @@ function Post({ postId, title, text, updatedAt, comments }) {
         }    
     }
 
+    function getPostComments(comments) {
+        return comments.filter((comment) => comment.post[0] === postId)
+    }
+
     return (
         <>
             <h2>{title}</h2>
             <p>{`(published on ${formatDate(updatedAt)})`}</p>
             <p>{text}</p>
             <h3>Comments</h3>
+            {getPostComments(comments).map((comment) =>
+                <Comment
+                    key={comment._id}
+                    title={comment.title}
+                    text={comment.text}
+                    authorName={comment.authorName} 
+                    updatedAt={comment.updatedAt}
+                />
+            )}
         </>
     )
 }
