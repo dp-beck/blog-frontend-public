@@ -1,8 +1,39 @@
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { DateTime } from "luxon";
 import Comment from './Comment';
 
 function Post({ postId, title, text, updatedAt, comments }) {
+
+    const [newComment, setNewComment] = useState({
+        title: '',
+        text: '',
+        authorName: '',
+        authorEmail: '',
+        post: postId,
+    });
+
+    const handleInputChange = (event) => {
+        const { name, value } = event.target;
+        setNewComment((prevProps) => ({
+            ...prevProps,
+            [name] : value
+        }));
+    };
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        
+        fetch('http://localhost:3000/api/comment/create', {
+            method: "POST", 
+            body: JSON.stringify(newComment),
+            headers: {
+                "Content-Type": "application/json;charset=utf-8",
+            },
+        }).then((res) => {
+            return res.json();
+        })
+    }
 
     function formatDate(date) {
         if (typeof date === "string") {
@@ -17,21 +48,44 @@ function Post({ postId, title, text, updatedAt, comments }) {
     }
 
     return (
-        <>
+        <div className='development-border'>
             <h2>{title}</h2>
             <p>{`(published on ${formatDate(updatedAt)})`}</p>
             <p>{text}</p>
+            
             <h3>Comments</h3>
-            {getPostComments(comments).map((comment) =>
-                <Comment
-                    key={comment._id}
-                    title={comment.title}
-                    text={comment.text}
-                    authorName={comment.authorName} 
-                    updatedAt={comment.updatedAt}
-                />
-            )}
-        </>
+            <div className='comments-section'>
+                {getPostComments(comments).map((comment) =>
+                    <Comment
+                        key={comment._id}
+                        title={comment.title}
+                        text={comment.text}
+                        authorName={comment.authorName} 
+                        updatedAt={comment.updatedAt}
+                    />
+                )}
+            </div>
+
+            <form onSubmit={handleSubmit} className='development-border'>
+                <label htmlFor="title">Title:</label>
+                <input type="text" name="title" id="title" onChange={handleInputChange} required />
+               
+                <label htmlFor="text">Text:</label>
+                <textarea name="text" id="text" cols="30" rows="10" required onChange={handleInputChange}>Write your comment here!</textarea>
+                
+                <label htmlFor="authorName">Name:</label>
+                <input type="text" name="authorName" id="authorName" required onChange={handleInputChange}/>
+
+                <label htmlFor="authorEmail">Email:</label>
+                <input type="email" name="authorEmail" id="authorEmail" required onChange={handleInputChange}/>
+
+                <label htmlFor="postId"></label>
+                <input type="hidden" name="postId" id="postId" value={postId} onChange={handleInputChange}/>
+
+                <input type="submit" value="Submit" />
+            </form>
+
+        </div>
     )
 }
 

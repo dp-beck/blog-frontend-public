@@ -26,7 +26,7 @@ function App() {
         console.log(data);
         setComments(data);
       });
-  }, []);
+  }, [comments]);
      
   return (
     <>

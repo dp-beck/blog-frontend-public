@@ -2,7 +2,7 @@
 - [X] Add in to dummy data for comments references to the post
 - [X] Create Component for each individual displayed post
 - [X] Create Component for each individual displayed comment
-- [ ] Add Ability to create new comment (per post)
+- [X] Add Ability to create new comment (per post)
 - [ ] Style
 
 .. then move on to blog administrator front-end
