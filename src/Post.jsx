@@ -5,6 +5,8 @@ import Comment from './Comment';
 
 function Post({ postId, title, text, updatedAt, comments }) {
 
+    const [updatedComments, setUpdatedComments] = useState(comments);
+
     const [newComment, setNewComment] = useState({
         title: '',
         text: '',
@@ -21,9 +23,7 @@ function Post({ postId, title, text, updatedAt, comments }) {
         }));
     };
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        
+    const postNewComment = () => {
         fetch('http://localhost:3000/api/comment/create', {
             method: "POST", 
             body: JSON.stringify(newComment),
@@ -33,7 +33,13 @@ function Post({ postId, title, text, updatedAt, comments }) {
         }).then((res) => {
             return res.json();
         })
-    }
+    };
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        postNewComment();
+        setUpdatedComments([...updatedComments, newComment]);
+    };
 
     function formatDate(date) {
         if (typeof date === "string") {
@@ -41,10 +47,6 @@ function Post({ postId, title, text, updatedAt, comments }) {
         } else {
             return "no date provided"
         }    
-    }
-
-    function getPostComments(comments) {
-        return comments.filter((comment) => comment.post[0] === postId)
     }
 
     return (
@@ -55,7 +57,7 @@ function Post({ postId, title, text, updatedAt, comments }) {
             
             <h3>Comments</h3>
             <div className='comments-section'>
-                {getPostComments(comments).map((comment) =>
+                {updatedComments.map((comment) =>
                     <Comment
                         key={comment._id}
                         title={comment.title}

@@ -1,10 +1,15 @@
+/*
+run useffect to get comments and put in state variable;
+but make it dependent on different state variable...
+*/
+
 import { useState, useEffect } from 'react';
 import './App.css';
 import Post from './Post';
 
 function App() {
   const [posts, setPosts] = useState([]);
-  const [comments, setComments] = useState([]);
+  const [fetchedComments, setFetchedComments] = useState([]);
 
   useEffect(() => {
     fetch('http://localhost:3000/api/posts')
@@ -12,7 +17,6 @@ function App() {
         return res.json();
       })
       .then((data) => {
-        console.log(data);
         setPosts(data);
       });
   }, []);
@@ -23,11 +27,14 @@ function App() {
         return res.json();
       })
       .then((data) => {
-        console.log(data);
-        setComments(data);
+        setFetchedComments(data);
       });
-  }, [comments]);
-     
+  }, []);
+  
+  function getPostComments(comments, post) {
+    return comments.filter((comment) => comment.post[0] === post._id)
+  }
+
   return (
     <>
       <h1>{`Dan's Blog`} </h1>
@@ -38,7 +45,7 @@ function App() {
         title={post.title}
         text={post.text}
         updatedAt={post.updatedAt}
-        comments={comments}
+        comments={getPostComments(fetchedComments, post)}
         />)}
     </>
   )
