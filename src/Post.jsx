@@ -5,8 +5,6 @@ import Comment from './Comment';
 
 function Post({ postId, title, text, updatedAt, comments }) {
 
-    const [updatedComments, setUpdatedComments] = useState(comments);
-
     const [newComment, setNewComment] = useState({
         title: '',
         text: '',
@@ -14,6 +12,8 @@ function Post({ postId, title, text, updatedAt, comments }) {
         authorEmail: '',
         post: postId,
     });
+
+    const [newComments, setNewComments] = useState([]);
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -38,7 +38,7 @@ function Post({ postId, title, text, updatedAt, comments }) {
     const handleSubmit = (event) => {
         event.preventDefault();
         postNewComment();
-        setUpdatedComments([...updatedComments, newComment]);
+        setNewComments([...newComments, newComment]);
     };
 
     function formatDate(date) {
@@ -50,14 +50,25 @@ function Post({ postId, title, text, updatedAt, comments }) {
     }
 
     return (
-        <div className='development-border'>
-            <h2>{title}</h2>
-            <p>{`(published on ${formatDate(updatedAt)})`}</p>
+        <div className="singlePost">
+            <div>
+                <h2 className='postTitle'>{title}  </h2>
+                <p className='publishedDate'>{`(published on ${formatDate(updatedAt)})`}</p>
+            </div>
             <p>{text}</p>
             
             <h3>Comments</h3>
             <div className='comments-section'>
-                {updatedComments.map((comment) =>
+                {comments.map((comment) =>
+                    <Comment
+                        key={comment._id}
+                        title={comment.title}
+                        text={comment.text}
+                        authorName={comment.authorName} 
+                        updatedAt={comment.updatedAt}
+                    />
+                )}
+                {newComments.map((comment) =>
                     <Comment
                         key={comment._id}
                         title={comment.title}
@@ -68,23 +79,35 @@ function Post({ postId, title, text, updatedAt, comments }) {
                 )}
             </div>
 
-            <form onSubmit={handleSubmit} className='development-border'>
-                <label htmlFor="title">Title:</label>
-                <input type="text" name="title" id="title" onChange={handleInputChange} required />
+            <form onSubmit={handleSubmit} className='commentsForm'>
+
+                <div className='formTitleInput'>
+                    <label htmlFor="title">Title:</label> <br />
+                    <input type="text" name="title" id="title" onChange={handleInputChange} required />
+                </div>
                
-                <label htmlFor="text">Text:</label>
-                <textarea name="text" id="text" cols="30" rows="10" required onChange={handleInputChange}>Write your comment here!</textarea>
+                <div className='formTextInput'>
+                    <label htmlFor="text">Comment:</label> <br />
+                    <textarea name="text" id="text" cols="50" rows="10" required onChange={handleInputChange}>Write your comment here!</textarea>
+                </div>
+
+                <div className='formAuthorNameInput'>
+                    <label htmlFor="authorName">Name:</label> <br />
+                    <input type="text" name="authorName" id="authorName" required onChange={handleInputChange}/>
+                </div>
+
+                <div className='formAuthorEmailInput'>    
+                    <label htmlFor="authorEmail">Email:</label> <br />
+                    <input type="email" name="authorEmail" id="authorEmail" required onChange={handleInputChange}/>
+                </div>
+
+                <div>
+                    <input type="submit" value="Submit" />
+                </div>
                 
-                <label htmlFor="authorName">Name:</label>
-                <input type="text" name="authorName" id="authorName" required onChange={handleInputChange}/>
-
-                <label htmlFor="authorEmail">Email:</label>
-                <input type="email" name="authorEmail" id="authorEmail" required onChange={handleInputChange}/>
-
                 <label htmlFor="postId"></label>
                 <input type="hidden" name="postId" id="postId" value={postId} onChange={handleInputChange}/>
 
-                <input type="submit" value="Submit" />
             </form>
 
         </div>

@@ -12,12 +12,7 @@ function Comment ( { title, text, authorName, updatedAt }) {
     }
 
     return (
-        <>
-            <h4>{title}</h4>
-            <p>{text}</p>
-            <p>{authorName}</p>
-            <p>{`published on ${formatDate(updatedAt)}`}</p>
-        </>
+        <p className="singleComment">{`${authorName} says... ${title} - ${text}`} <i>{`(${formatDate(updatedAt)})`}</i></p>
     )
 }
 

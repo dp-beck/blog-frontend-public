@@ -1,8 +1,3 @@
-/*
-run useffect to get comments and put in state variable;
-but make it dependent on different state variable...
-*/
-
 import { useState, useEffect } from 'react';
 import './App.css';
 import Post from './Post';
@@ -37,16 +32,25 @@ function App() {
 
   return (
     <>
-      <h1>{`Dan's Blog`} </h1>
-      {posts.map((post) => 
-      <Post 
-        key={post._id} 
-        postId = {post._id}
-        title={post.title}
-        text={post.text}
-        updatedAt={post.updatedAt}
-        comments={getPostComments(fetchedComments, post)}
-        />)}
+      <header>
+        <h1>{`Dan's Blog`} </h1>
+      </header>
+
+      <div id="posts">
+        {posts.map((post) => 
+        <Post 
+          key={post._id} 
+          postId = {post._id}
+          title={post.title}
+          text={post.text}
+          updatedAt={post.updatedAt}
+          comments={getPostComments(fetchedComments, post)}
+          />)}
+
+      </div>
+        <footer>
+          <a href="https://www.freepik.com/free-vector/aged-paper-texture-background-design_14765966.htm#query=faded%20paper&position=0&from_view=keyword&track=ais&uuid=87dc82a0-ecc8-4576-abcf-2a22e659938d">Background Image by boggus</a> on Freepik
+        </footer>
     </>
   )
 }

@@ -3,6 +3,6 @@
 - [X] Create Component for each individual displayed post
 - [X] Create Component for each individual displayed comment
 - [X] Add Ability to create new comment (per post)
-- [ ] Style
+- [X] Style
 
 .. then move on to blog administrator front-end
