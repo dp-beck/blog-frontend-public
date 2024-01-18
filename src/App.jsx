@@ -3,7 +3,7 @@ import './App.css';
 import Post from './Post';
 
 function App() {
-  const [posts, setPosts] = useState([]);
+  const [publishedPosts, setPublishedPosts] = useState([]);
   const [fetchedComments, setFetchedComments] = useState([]);
 
   useEffect(() => {
@@ -12,7 +12,7 @@ function App() {
         return res.json();
       })
       .then((data) => {
-        setPosts(data);
+        setPublishedPosts(data.filter((post) => post.published === true));
       });
   }, []);
 
@@ -25,7 +25,7 @@ function App() {
         setFetchedComments(data);
       });
   }, []);
-  
+
   function getPostComments(comments, post) {
     return comments.filter((comment) => comment.post[0] === post._id)
   }
@@ -37,7 +37,7 @@ function App() {
       </header>
 
       <div id="posts">
-        {posts.map((post) => 
+        {publishedPosts.map((post) => 
         <Post 
           key={post._id} 
           postId = {post._id}
